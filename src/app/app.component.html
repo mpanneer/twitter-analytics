@@ -1,0 +1,20 @@
+<style>
+  li{
+    display:inline;
+    padding-right: 20px;  
+  }
+</style>
+<div style="text-align:center">
+  <h1>
+    {{title}}
+  </h1>
+    <nav>
+      <ul>
+      <li><a [routerLink]="['/maps']" [queryParams]="{city: 'vic'}">Melbourne</a></li>
+      <li><a [routerLink]="['/maps']" [queryParams]="{city: 'nsw'}">Sydney</a></li>
+      <li><a routerLink="/charts" routerLinkActive="active">Charts</a></li>
+      </ul>
+    </nav>
+    <router-outlet></router-outlet>
+</div>
+
