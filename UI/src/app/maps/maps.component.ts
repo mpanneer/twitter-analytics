@@ -18,9 +18,8 @@ export class MapsComponent implements OnInit {
   gmap: google.maps.Map;
   @ViewChild('gmap') gmapElement: any;
 
-  constructor(private route: ActivatedRoute, private _twitterAnalytics: TwitteranalyticsService, private cd : ChangeDetectorRef) {
-    //console.log(this.route.snapshot.params.id);
-    //this.state = this.route.snapshot.params.id;
+  constructor(private route: ActivatedRoute, private _twitterAnalytics: TwitteranalyticsService) {
+    
   }
 
   ngOnInit() {
@@ -46,7 +45,7 @@ export class MapsComponent implements OnInit {
         mapTypeControl: false,
         panControl: false
       };
-      this.cd.detectChanges();
+      
       var infoWindow = new google.maps.InfoWindow();
       this.gmap = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
       this.gmap.panTo(latLng);
