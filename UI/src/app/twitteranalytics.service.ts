@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of} from 'rxjs';
+import { environment } from '../environments/environment';
 
+const API_URL = environment.apiUrl;
 
 export interface StateInfo {
   name: string;
@@ -22,19 +24,19 @@ export class TwitteranalyticsService {
   constructor(private http: HttpClient) {}
 
   getStateInfo(name: string): Observable<StateInfo> {
-    return this.http.get<StateInfo>('http://localhost:8000/api/states/' + name);
+    return this.http.get<StateInfo>(API_URL+'/api/states/' + name);
   }
 
   getAllSuburbsFeature(): Observable<SuburbFeature> {
-    return this.http.get<SuburbFeature>('http://localhost:8000/api/suburbs');
+    return this.http.get<SuburbFeature>(API_URL+'/api/suburbs');
   }
 
   getAllSuburbsFeatureByState(stateName: string): Observable<SuburbFeature> {
-    return this.http.get<SuburbFeature>('http://localhost:8000/api/'+ stateName +'/suburbs');
+    return this.http.get<SuburbFeature>(API_URL+'/api/'+ stateName +'/suburbs');
   }
 
   getSuburbFeature(name: string): Observable<SuburbFeature> {
-    return this.http.get<SuburbFeature>('http://localhost:8000/api/suburb/' + name);
+    return this.http.get<SuburbFeature>(API_URL+'/api/suburb/' + name);
   }
 
   tweetsPerPostcode() {
