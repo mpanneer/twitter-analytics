@@ -1,4 +1,12 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of} from 'rxjs';
+
+
+export interface CityInfo {
+  id: string;
+  position: any;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -6,7 +14,11 @@ import { Injectable } from '@angular/core';
 
 export class TwitteranalyticsService {
 
-  constructor() { }
+  constructor(private http: HttpClient) {}
+
+  getCityInfo(name: string): Observable<CityInfo> {
+    return this.http.get<CityInfo>('http://localhost:8000/api/city-info/' + name);
+  }
 
   tweetsPerPostcode() {
     let tweets = [];
