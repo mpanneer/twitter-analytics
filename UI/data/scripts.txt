@@ -1,0 +1,18 @@
+curl -H "Content-type:application/json" -X DELETE http://admin:nimda@43.240.98.139:5984/states
+curl -H "Content-type:application/json" -d @states.json -X POST http://admin:nimda@43.240.98.139:5984/states/_bulk_docs
+
+curl -H "Content-type:application/json" -X DELETE http://admin:nimda@43.240.98.139:5984/suburbs
+curl -H "Content-type:application/json" -d @vic-suburbs.json -X POST http://admin:nimda@43.240.98.139:5984/suburbs/_bulk_docs
+curl -H "Content-type:application/json" -d @nsw-suburbs.json -X POST http://admin:nimda@43.240.98.139:5984/suburbs/_bulk_docs
+
+curl -H "Content-type:application/json" -X DELETE http://admin:nimda@43.240.98.139:5984/suburbs/_design/docs
+curl -H "Content-type:application/json" -d @suburbs-views.json -X PUT http://admin:nimda@43.240.98.139:5984/suburbs/_design/docs
+curl -H "Content-type:application/json" -X GET http://admin:nimda@43.240.98.139:5984/suburbs/_design/docs
+
+curl -H "Content-type:application/json" -X DELETE http://admin:nimda@43.240.98.139:5984/states/_design/docs
+curl -H "Content-type:application/json" -d @states-views.json -X PUT http://admin:nimda@43.240.98.139:5984/states/_design/docs
+curl -H "Content-type:application/json" -X GET http://admin:nimda@43.240.98.139:5984/states/_design/docs
+
+
+curl -H "Content-type:application/json" -X GET http://admin:nimda@43.240.98.139:5984/suburbs/_design/docs/_view/by_state?key=%22Victoria%22
+curl -H "Content-type:application/json" -X GET http://admin:nimda@43.240.98.139:5984/suburbs/_design/docs/_view/by_suburb?key=Werribee

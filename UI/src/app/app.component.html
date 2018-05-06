@@ -10,8 +10,8 @@
   </h1>
     <nav>
       <ul>
-      <li><a [routerLink]="['/maps']" [queryParams]="{city: 'vic'}">Melbourne</a></li>
-      <li><a [routerLink]="['/maps']" [queryParams]="{city: 'nsw'}">Sydney</a></li>
+      <li><a [routerLink]="['maps', 'Victoria']">Victoria</a></li>
+      <li><a [routerLink]="['maps', 'New South Wales']">New South Wales</a></li>
       <li><a routerLink="/charts" routerLinkActive="active">Charts</a></li>
       </ul>
     </nav>

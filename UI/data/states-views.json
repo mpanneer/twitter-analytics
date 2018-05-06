@@ -1,0 +1,7 @@
+{
+  "views": {
+    "by_name": {
+      "map": "function(doc) { emit(doc.name.trim(), doc) }"
+    }
+  }
+}

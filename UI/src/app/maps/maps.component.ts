@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { } from '@types/googlemaps';
 import { ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { TwitteranalyticsService, CityInfo } from '../twitteranalytics.service';
+import { TwitteranalyticsService, StateInfo, SuburbFeature } from '../twitteranalytics.service';
 import { Observable, of } from 'rxjs';
 import {ChangeDetectorRef} from '@angular/core';
+
 
 @Component({
   selector: 'app-maps',
@@ -13,26 +14,30 @@ import {ChangeDetectorRef} from '@angular/core';
 })
 export class MapsComponent implements OnInit {
 
-  city: string;
-
+  state: string;
+  gmap: google.maps.Map;
   @ViewChild('gmap') gmapElement: any;
 
   constructor(private route: ActivatedRoute, private _twitterAnalytics: TwitteranalyticsService, private cd : ChangeDetectorRef) {
-    this.route.queryParams.subscribe(params => {
-      this.city = params['city'];
-    });
+    //console.log(this.route.snapshot.params.id);
+    //this.state = this.route.snapshot.params.id;
   }
 
   ngOnInit() {
-    
-    
-    this._twitterAnalytics.getCityInfo(this.city).subscribe((data: CityInfo) => {
-      let cityInfo = data['data'];
-      let position = cityInfo['position'];
-      let cityLat = position.lat;
-      let cityLong = position.long;
+    this.route.params.subscribe(params => {
+      this.state = params['state'];
+      this.showMap();
+    });
+  }
 
-      let latLng = new google.maps.LatLng(cityLat, cityLong);
+  showMap() {
+    this._twitterAnalytics.getStateInfo(this.state).subscribe((data: StateInfo) => {
+      let response = data['data'];
+      let stateInfo = response['rows'];
+      let stateLat = stateInfo[0].value.position.lat;
+      let stateLong = stateInfo[0].value.position.long;
+
+      let latLng = new google.maps.LatLng(stateLat, stateLong);
       var mapProp = {
         center: latLng,
         zoom: 10,
@@ -43,14 +48,22 @@ export class MapsComponent implements OnInit {
       };
       this.cd.detectChanges();
       var infoWindow = new google.maps.InfoWindow();
-      let gmap = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-      gmap.panTo(latLng);
-      gmap.data.loadGeoJson('/assets/' + this.city + '.json');
-      gmap.data.setStyle({ fillOpacity: 0.0, strokeWeight: 1.0 });
+      this.gmap = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+      this.gmap.panTo(latLng);
+      
+      this._twitterAnalytics.getAllSuburbsFeatureByState(this.state).subscribe((data : SuburbFeature) => {
+        let suburb = data['data'];
+        let suburbs = suburb['rows'];
+        suburbs.forEach(element => {
+          let suburbFeature = element.value
+          this.gmap.data.addGeoJson(suburbFeature);
+        });
+      });
 
-      gmap.data.addListener('click', function (event) {
+      this.gmap.data.setStyle({ fillOpacity: 0.0, strokeWeight: 1.0 });
+
+      this.gmap.data.addListener('click', function (event) {
         let data = event;
-        console.log(event);
         let suburb = data.feature.f.Suburb_Name;
         infoWindow.setContent(suburb + "<br/>This is a test");
         infoWindow.setPosition(event.latLng);

@@ -1,0 +1,10 @@
+{
+  "views": {
+    "by_state": {
+      "map": "function(doc) { emit(doc.properties.State, doc) }"
+    },
+    "by_suburb": {
+      "map": "function(doc) { emit(TRIM(doc.properties.Suburb_Name,' '), doc) }"
+    }
+  }
+}

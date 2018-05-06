@@ -6,9 +6,9 @@ import {HttpClientModule} from '@angular/common/http'
 import { AppComponent } from './app.component';
 import { MapsComponent } from './maps/maps.component';
 import { ChartsComponent } from './charts/charts.component';
+import { MapsModule } from './maps/maps.module';
 
 const appRoutes: Routes = [
-  { path: 'maps',        component: MapsComponent },
   { path: 'charts',      component: ChartsComponent },
 ];
 
@@ -16,7 +16,6 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    MapsComponent,
     ChartsComponent
   ],
   imports: [
@@ -26,7 +25,9 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: false }
-    )
+    ),
+    MapsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

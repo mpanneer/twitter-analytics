@@ -1,0 +1,21 @@
+{
+"docs": [{
+  "_id": "nsw",
+  "name": "New South Wales",
+  "_rev": "2-e41561e7fd4128438a71ce1be061bc73",
+  "position": {
+      "lat": -33.865143,
+      "long": 151.2099
+  }
+},
+{
+  "_id": "vic",
+  "name": "Victoria",
+  "_rev": "2-3345e897d5f451b6fd417eb916f93019",
+  "position": {
+      "lat": -37.813,
+      "long": 144.963
+  }
+}
+]
+}
