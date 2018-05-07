@@ -4,3 +4,21 @@
 
     roles:
       - web
+
+  - hosts: couchdb
+    become: yes
+    
+    roles:
+      - couchdb
+
+  - hosts: harvester
+    become: yes
+    
+    roles:
+      - harvester
+  
+  - hosts: analyser
+    become: yes
+    
+    roles:
+      - analyser

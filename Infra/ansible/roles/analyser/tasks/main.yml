@@ -1,2 +1,8 @@
 ---
 # tasks file for analyser
+
+- name: Install Pip
+  become: yes
+  apt:
+   name: python-pip
+   state: present

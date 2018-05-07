@@ -57,7 +57,12 @@ Resources:
           IpProtocol: "tcp"
           FromPort: "8000"
           ToPort: "8000"
-          CidrIp: "0.0.0.0/0"  
+          CidrIp: "0.0.0.0/0" 
+        -
+          IpProtocol: "tcp"
+          FromPort: "5984"
+          ToPort: "5984"
+          CidrIp: "0.0.0.0/0" 
   NovaInstance:
     Type: OS::Nova::Server
     Properties:

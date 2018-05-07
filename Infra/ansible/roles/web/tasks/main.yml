@@ -52,7 +52,7 @@
     when: git_finished.changed  
 
   - name: Start API
-    command: pm2 start server.js {{COUCHDB_HOST}} {{API_PORT}} --name api chdir={{homeDir}}/{{appDir}}/API
+    command: pm2 start server.js -- {{COUCHDB_HOST}} {{API_PORT}} --name api chdir={{homeDir}}/{{appDir}}/API
     ignore_errors: yes
     when: api_npm_finished.changed
 

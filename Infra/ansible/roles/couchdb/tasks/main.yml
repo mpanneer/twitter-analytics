@@ -1,2 +1,26 @@
 ---
 # tasks file for couchdb
+
+- name: add couchdb PPA repository
+  become: yes
+  apt_repository:
+   repo: ppa:couchdb/stable
+
+- name: install dependencies for couchdb
+  apt:
+    name: couchdb
+    state: present
+
+- name: create configuration file
+  become: yes
+  template:
+    src: config.ini
+    dest: /etc/couchdb/local.d/config.ini
+    mode: 0770
+    owner: couchdb
+    group: couchdb
+  notify: restart couchdb
+
+- name: start CouchDB
+  service: name=couchdb state=started
+

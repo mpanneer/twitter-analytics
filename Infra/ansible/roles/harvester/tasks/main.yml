@@ -1,2 +1,9 @@
 ---
 # tasks file for harvester
+
+- name: Install java
+  become: yes
+  apt:
+   name: openjdk-8-jre-headless
+   state: present
+
