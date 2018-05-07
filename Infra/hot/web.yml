@@ -1,0 +1,5 @@
+parameters:
+  ImageId: f82012f7-5042-48aa-81c2-a59684840c23
+  KeyName: endurance
+  InstanceType: m1.small
+  AvailabilityZone: melbourne-qh2

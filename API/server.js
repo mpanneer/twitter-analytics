@@ -3,14 +3,18 @@ const cors = require('cors')
 const app = express();
 const NodeCouchDb = require('node-couchdb');
 
+var args = process.argv.slice(2);
+const CouchDBHost = args[0];
+const portToBind = args[1];
+
 app.use(cors())
 
-app.listen(8000, () => {
-    console.log('Server started!');
+app.listen(portToBind, () => {
+    console.log('Server started at '+portToBind);
 });
 
 const couch = new NodeCouchDb({
-    host: '43.240.98.139',
+    host: CouchDBHost,
     protocol: 'http',
     port: 5984
 });

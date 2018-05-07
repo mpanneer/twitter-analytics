@@ -1,0 +1,62 @@
+---
+  - name: Install the gpg key for nodejs LTS
+    apt_key:
+      url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+      state: present
+
+  - name: Install the package "git"
+    apt:
+      name: git
+      state: present
+      update_cache: yes
+
+  - name: Install the nodejs LTS repos
+    apt_repository:
+      repo: "deb https://deb.nodesource.com/node_{{ NODEJS_VERSION }}.x {{ ansible_distribution_release }} main"
+      state: present
+      update_cache: yes
+
+  - name: Install the nodejs
+    apt:
+      name: nodejs
+      state: present
+
+  - name: Install "pm2" node.js package.
+    npm: name=pm2 global=yes production=yes
+
+  - name: Install "http-server" node.js package.
+    npm: name=http-server global=yes
+
+  - name: Create a directory for the App
+    file: path={{homeDir}}/{{appDir}} state=directory
+
+  - name: Clone the Git repo
+    git: repo=https://github.com/{{githubAccount}}/{{repoName}}.git dest={{homeDir}}/{{appDir}} update=yes force=yes accept_hostkey=yes
+    register: git_finished
+
+  - name: Running NPM install on the API app
+    npm: path={{homeDir}}/{{appDir}}/API
+    register: api_npm_finished
+    when: git_finished.changed
+
+  - name: Running NPM install on the UI app
+    npm: path={{homeDir}}/{{appDir}}/UI
+    register: ui_npm_finished
+    when: git_finished.changed
+
+  - name: Running NPM build on the UI app
+    shell: npm run build
+    args:
+      chdir: "{{homeDir}}/{{appDir}}/UI"
+    register: ui_npm_finished
+    when: git_finished.changed  
+
+  - name: Start API
+    command: pm2 start server.js {{COUCHDB_HOST}} {{API_PORT}} --name api chdir={{homeDir}}/{{appDir}}/API
+    ignore_errors: yes
+    when: api_npm_finished.changed
+
+  - name: Start UI
+    command: pm2 start http-server --name ui -- {{homeDir}}/{{appDir}}/UI/dist/twitteranalytics -p 80
+    ignore_errors: yes
+    when: ui_npm_finished.changed  

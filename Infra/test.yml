@@ -6,7 +6,7 @@
   vars:
     - homeDir: /home/ubuntu
     - appDir : twitter_analytics
-    - repoName : twitter_analytics
+    - repoName : twitter-analytics
     - githubAccount: mpanneer
 
   tasks:
