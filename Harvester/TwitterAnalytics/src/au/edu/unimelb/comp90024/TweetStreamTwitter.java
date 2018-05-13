@@ -19,7 +19,7 @@ public final class TweetStreamTwitter {
     private final static Logger LOGGER = Logger
             .getLogger(Configuration.class.getName());
 
-    public static final int MAX_STREAM_BATCH_SIZE_FOR_PROCESSING = 500;
+    public static final int BUFFER_SIZE_FOR_PROCESSING = 100;
 
     // Unlike search, stream can be established only with one account
     private TwitterAccount streamingAccount;
@@ -50,7 +50,7 @@ public final class TweetStreamTwitter {
                 String json = TwitterObjectFactory.getRawJSON(status);
                 LOGGER.log(Level.FINEST, "Streaming tweet: {0}", json);
                 tweetJsons.add(json);
-                if (tweetJsons.size() == MAX_STREAM_BATCH_SIZE_FOR_PROCESSING) {
+                if (tweetJsons.size() == BUFFER_SIZE_FOR_PROCESSING) {
                     TweetProcessor.handleTweets(tweetJsons, stateTag);
                     tweetJsons = new ArrayList<String>();
                     LOGGER.log(Level.FINE,

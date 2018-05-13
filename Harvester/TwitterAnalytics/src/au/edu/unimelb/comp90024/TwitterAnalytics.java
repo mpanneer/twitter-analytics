@@ -108,7 +108,7 @@ public class TwitterAnalytics {
     private static void processFileTweets() {
         String readDirectory = Configuration.getReaderReadDirectory();
         String workingDirectory = Configuration.getReaderWorkingDirectory();
-        String fileTweetState = Configuration.getFileTweetState();
+        String fileTweetState = Configuration.getCityQuery();
         String readFileExtension = Configuration.getReadFileExtension();
 
         TweetReaderFile harvestorOne = new TweetReaderFile(readDirectory,

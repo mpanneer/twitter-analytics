@@ -71,6 +71,12 @@ public class TweetReaderFile extends Thread implements TweetReader {
         this.fileTweetState = fileTweetState;
 
         filesToBeProcessed = new LinkedList<String>();
+
+        LOGGER.log(Level.FINE, "TweetReader from a file object created");
+        LOGGER.log(Level.INFO,
+                "TweetWriter Working Dir:{0} Inbound Dir:{1} FileSuffix:{2} TweetState:{3} ",
+                new Object[] { this.readDirectory, this.workingDirectory,
+                        this.readFileExtension, this.fileTweetState });
     }
 
     /**

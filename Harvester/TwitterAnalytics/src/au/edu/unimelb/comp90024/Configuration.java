@@ -38,7 +38,6 @@ public class Configuration {
     private static String readerReadDirectory = "C:\\CC\\READER\\INBOUND";
     private static String readerWorkingDirectory = "C:\\CC\\READER\\WORKING";
     private static String readFileExtension = ".txt";
-    private static String fileTweetState = "vic";
 
     // 1.2. Config to read from Twitter
     // if you want to use different accounts to keep pulling data after a
@@ -166,7 +165,7 @@ public class Configuration {
                 Field field = Configuration.class.getDeclaredField(key);
 
                 // handle arrays
-                if (value.contains(",") && field.getType().isArray()) {
+                if (field.getType().isArray()) {
                     String[] arrayValues = value.split(",");
                     field.set(null, arrayValues);
 
@@ -317,10 +316,6 @@ public class Configuration {
 
     public static String getReaderWorkingDirectory() {
         return readerWorkingDirectory;
-    }
-
-    public static String getFileTweetState() {
-        return fileTweetState;
     }
 
     public static String getCityQuery() {

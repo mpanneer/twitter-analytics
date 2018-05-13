@@ -131,14 +131,15 @@ public class TweetReaderTwitter implements TweetReader {
 
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setJSONStoreEnabled(true).setDebugEnabled(debug)
-                .setOAuthConsumerKey(
-                        accountPool[currentTwitterAccountIndex].getConsumerKey())
+                .setOAuthConsumerKey(accountPool[currentTwitterAccountIndex]
+                        .getConsumerKey())
                 .setOAuthConsumerSecret(accountPool[currentTwitterAccountIndex]
                         .getConsumerSecret())
-                .setOAuthAccessToken(
-                        accountPool[currentTwitterAccountIndex].getAccessToken())
-                .setOAuthAccessTokenSecret(accountPool[currentTwitterAccountIndex]
-                        .getAccessTokenSecret());
+                .setOAuthAccessToken(accountPool[currentTwitterAccountIndex]
+                        .getAccessToken())
+                .setOAuthAccessTokenSecret(
+                        accountPool[currentTwitterAccountIndex]
+                                .getAccessTokenSecret());
         Twitter twitter = new TwitterFactory(cb.build()).getInstance();
         return twitter;
     }
@@ -150,8 +151,9 @@ public class TweetReaderTwitter implements TweetReader {
      */
     public void manageTwitterAccount() {
         this.currentTwitterAccountIndex = findNextAccountMinWaitTime();
-        long waitTime = accountPool[currentTwitterAccountIndex].getNextRetryTime()
-                .getTime() - System.currentTimeMillis() + 30000;
+        long waitTime = accountPool[currentTwitterAccountIndex]
+                .getNextRetryTime().getTime() - System.currentTimeMillis()
+                + 30000;
         try {
             if (waitTime > 0) {
                 LOGGER.log(Level.INFO, "Harvestor will queue up for {0} secs ",
@@ -296,7 +298,7 @@ public class TweetReaderTwitter implements TweetReader {
                 }
             } catch (TwitterException te) {
 
-                if (te != null
+                if (te != null && te.getErrorMessage() != null
                         && te.getErrorMessage().equals("Rate limit exceeded")) {
                     LOGGER.log(Level.FINER,
                             "Harvestor Thread Rate Limit Exceeded "

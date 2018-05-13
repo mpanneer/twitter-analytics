@@ -69,6 +69,12 @@ public class TweetProcessor extends Thread {
 
         if (activeThreads == null)
             activeThreads = new AtomicInteger(0);
+
+        LOGGER.log(Level.INFO,
+                "Tweet Processor set up filtergeo:{0} reverseGeo:{1} url:{2} enableState:{3} enableDoc:{4}",
+                new Object[] { filterGeoTweets, enableGeoTagging,
+                        ReverseGeocodeURL, enableStateTagging,
+                        enableDocTypeTagging });
     }
 
     /**
@@ -153,8 +159,10 @@ public class TweetProcessor extends Thread {
             if (enableGeoTagging) {
                 geoTaggedTweet = geoTagTweet(tweet);
                 postProcessedTweets.add(geoTaggedTweet);
+                LOGGER.log(Level.FINEST, "Processed Tweet : " + geoTaggedTweet);
             } else {
                 postProcessedTweets.add(tweet);
+                LOGGER.log(Level.FINEST, "Processed Tweet : " + tweet);
             }
         }
 

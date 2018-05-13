@@ -39,23 +39,31 @@ public class MergeAurinGeoJSON {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        String nswAurinJSON = Util.readFile(
-                "C:\\Users\\msatyam\\Documents\\CC\\AURIN\\NSW_JSON\\data1607887611930028619.json");
-        String nswGeoJSON = Util
-                .readFile("C:\\Users\\msatyam\\Documents\\CC\\AURIN\\nsw.json");
+        if (args.length != 5) {
+            System.out.println(
+                    "Please provide 5 arguments [NSWAurin][NswGEO][VicAurin][VicGeo][configfile]");
+            System.exit(1);
+
+        }
+
+        // Setup a Tweet TweetProcessor
+        TweetProcessor.loadPostProcessorConfig();
+
+        String nswAurinJSON = Util.readFile(args[0]);
+        String nswGeoJSON = Util.readFile(args[1]);
         List<JSONObject> nswSuburbs = mergeAurinGeoJson(nswAurinJSON,
                 nswGeoJSON, "nsw");
 
-        String vicAurinJSON = Util.readFile(
-                "C:\\Users\\msatyam\\Documents\\CC\\AURIN\\VIC_JSON\\data3750039501434406414.json");
-        String vicGeoJSON = Util
-                .readFile("C:\\Users\\msatyam\\Documents\\CC\\AURIN\\vic.json");
+        String vicAurinJSON = Util.readFile(args[2]);
+        String vicGeoJSON = Util.readFile(args[3]);
 
         List<JSONObject> vicSuburbs = mergeAurinGeoJson(vicAurinJSON,
                 vicGeoJSON, "vic");
 
         // Util.printList("NSW Suburbs", nswSuburbs);
         // Util.printList("VIC Suburbs", vicSuburbs);
+        Configuration.loadConfig(args[4]);
+
         String couchTweetsDB = Configuration.getCouchTweetsDB();
         String couchUserName = Configuration.getCouchUserName();
         String couchPassword = Configuration.getCouchPassword();
