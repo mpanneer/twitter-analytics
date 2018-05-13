@@ -31,6 +31,7 @@ public class Configuration {
     // Read Tweets from twitter or directory
     // Twitter : to read from Twitter
     // File : to read from File
+    // Stream : to stream tweets from Twitter using bounding locations
     private static String tweetSource = "File";
 
     // 1.1. Config to Read from File
@@ -52,10 +53,7 @@ public class Configuration {
     private static String direction = "Reverse";
 
     // Twitter search query
-    // melbourne geocode:-37.8136,144.9631,50mi
-    // sydney geocode:-33.8688,151.2093,50mi
     // Lat and long can be got by googling coordinates of a place
-    // search=geocode:-37.8136,144.9631,50mi
     private static String cityQuery = "nsw";
 
     private static Map<String, String> cityQueryMap;
@@ -81,6 +79,18 @@ public class Configuration {
                                                                   // radius
                                                                   // around
                                                                   // perth
+    }
+
+    // Twitter stream Bounding Box Map
+    // Can be extended to handle any locations
+
+    private static Map<String, double[][]> cityStreamMap;
+    static {
+        cityStreamMap = new HashMap<String, double[][]>();
+        cityStreamMap.put("vic",
+                new double[][] { { 143.5, -39.3 }, { 146.5, -36.3 } }); // 50
+        cityStreamMap.put("nsw",
+                new double[][] { { 149.7, -35.4 }, { 152.7, -32.4 } }); // 50
     }
 
     // between 0(today) and 6 (6 days ago)
@@ -227,6 +237,10 @@ public class Configuration {
 
     public static Map<String, String> getCityqueryMap() {
         return cityQueryMap;
+    }
+
+    public static Map<String, double[][]> getCityStreamMap() {
+        return cityStreamMap;
     }
 
     public static void setCityqueryMap(Map<String, String> cityqueryMap) {

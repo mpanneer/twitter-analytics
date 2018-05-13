@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import twitter4j.TwitterException;
+
 /**
  * The TwitterAnalytics class provides the main class for the application. It
  * assists in loading configuration and then setting up readers,processors and
@@ -39,8 +41,11 @@ public class TwitterAnalytics {
         String query = Configuration.getCityQueryMap().get(queryState);
 
         if (query == null || (query.trim().length() == 0) || queryState == null
-                || queryState.trim().length() == 0)
-            printUsageTwitterAnalytics();
+                || queryState.trim().length() == 0) {
+            System.out.println(
+                    "Invalid City Query in Configuration. Please check");
+            System.exit(1);
+        }
 
         Long referenceTwitterID = Configuration.getReferenceId();
         Integer noOfDayBeforeToday = Configuration.getNoOfDayBeforeToday();
@@ -66,6 +71,38 @@ public class TwitterAnalytics {
     }
 
     /**
+     * Function to setup TweetStreamTwitter
+     */
+    public static void processTwitterStream() {
+
+        String queryState = Configuration.getCityQuery();
+        double[][] queryStateBoundingBox = {};
+        try {
+            queryStateBoundingBox = Configuration.getCityStreamMap()
+                    .get(queryState);
+        } catch (NullPointerException e) {
+            System.out.println(
+                    "Invalid City Query in Configuration. Please check");
+            System.exit(1);
+        }
+
+        // Stream can happen only with one account, hence first set of
+        // credentials will be chosen
+        String key = Configuration.getKey()[0];
+        String secret = Configuration.getSecret()[0];
+        String token = Configuration.getToken()[0];
+        String tokenSecret = Configuration.getTokenSecret()[0];
+        boolean twitterLogging = Configuration.isTwitterLogging();
+
+        TwitterAccount account = new TwitterAccount(key, secret, token,
+                tokenSecret);
+
+        TweetStreamTwitter streamerOne = new TweetStreamTwitter(account,
+                queryStateBoundingBox, queryState, twitterLogging);
+        streamerOne.streamTweets();
+    }
+
+    /**
      * Function to setup TweetReaderFile
      */
     private static void processFileTweets() {
@@ -85,7 +122,7 @@ public class TwitterAnalytics {
      * 
      * @throws IOException
      */
-    private static void setUpWriter() throws IOException {
+    private static void setUpWriter() {
         String writeMode = Configuration.getWriteMode();
         int writeBatchSize = Configuration.getWriteBatchSize();
 
@@ -95,8 +132,17 @@ public class TwitterAnalytics {
             String writeFileExtension = Configuration.getWriteFileExtension();
             TweetWriterFile writer = TweetWriterFile.getInstance();
 
-            writer.init(workingDirectory, outboundDirectory, writeFileExtension,
-                    writeBatchSize);
+            try {
+                writer.init(workingDirectory, outboundDirectory,
+                        writeFileExtension, writeBatchSize);
+            } catch (IOException e) {
+                System.out.println(
+                        "Invalid Writer Configuration in Config File. Check Log for more details");
+                LOGGER.log(Level.SEVERE,
+                        "IO Exception thrown when setting up Writer"
+                                + e.getMessage(),
+                        e);
+            }
             TweetProcessor.loadWriter(writer);
         } else if (writeMode.equalsIgnoreCase("couchdb")) {
             String couchTweetsDB = Configuration.getCouchTweetsDB();
@@ -120,8 +166,9 @@ public class TwitterAnalytics {
      * 
      * @param args
      * @throws IOException
+     * @throws TwitterException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         if (args.length == 1) {
             Configuration.loadConfig(args[0]);
@@ -141,6 +188,8 @@ public class TwitterAnalytics {
             processTwitterTweets();
         } else if (tweetSource.equalsIgnoreCase("File")) {
             processFileTweets();
+        } else if (tweetSource.equalsIgnoreCase("Stream")) {
+            processTwitterStream();
         } else {
             System.out.println("Invalid tweetSource in Config File");
             LOGGER.log(Level.SEVERE,
