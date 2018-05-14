@@ -28,8 +28,9 @@
 - file:
     path: "{{homeDir}}/{{appDir}}/harvester/startup.sh"
     state: touch
-    mode: "u+x"
-
-- name: Start the harvester
-  command: sh "{{homeDir}}/{{appDir}}/harvester/startup.sh"
+    mode: "+x"
  
+- name: Start the harvesters
+  command: sh startup.sh
+  args:
+    chdir: /home/ubuntu/twitter_analytics/harvester
