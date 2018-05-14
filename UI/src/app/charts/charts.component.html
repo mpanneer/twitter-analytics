@@ -1,3 +1,80 @@
-<div>
-  <canvas id="canvas" width="1000" height="300">{{ chart }}</canvas>
-</div>
+<table class="table table-bordered table-striped table-sm" style="float:left; width: 500px;height:100px; caption-side:top;">
+  <caption class="text-center" style="caption-side:top;">Suburb Attributes - AURIN</caption>
+  <thead class="thead-light">
+    <th>Victoria</th>
+    <th>New South Wales</th>
+  </thead>
+  <tbody class="text-left">
+    <tr>
+      <td>
+        <a [routerLink]="['/chart/salary/vic']">1. Median Income</a>
+      </td>
+      <td>
+        <a [routerLink]="['/chart/salary/nsw']">1. Median Income</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a [routerLink]="['/chart/literacy/vic']">2. Year 12 Pass %</a>
+      </td>
+      <td>
+        <a [routerLink]="['/chart/literacy/nsw']">2. Year 12 Pass %</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a [routerLink]="['/chart/unistudents/vic']">3. University Students %</a>
+      </td>
+      <td>
+        <a [routerLink]="['/chart/unistudents/nsw']">3. University Students %</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a [routerLink]="['/chart/employed/vic']">4. Employment %</a>
+      </td>
+      <td>
+        <a [routerLink]="['/chart/employed/nsw']">4. Employment %</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-bordered table-striped table-sm" style="float:left; width: 300px;height:100px; caption-side:top;">
+  <caption class="text-center" style="caption-side:top;">Suburb Emotions - Twitter</caption>
+  <thead class="thead-light">
+    <th>Victoria</th>
+    <th>New South Wales</th>
+  </thead>
+  <tbody class="text-left">
+    <tr>
+      <td>
+        <a [routerLink]="['/chart/emotion/happy/vic']">1. Happiest</a>
+      </td>
+      <td>
+        <a [routerLink]="['/chart/emotion/happy/nsw']">1. Happiest</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a [routerLink]="['/chart/emotion/neutral/vic']">2. Neutral</a>
+      </td>
+      <td>
+        <a [routerLink]="['/chart/emotion/neutral/nsw']">2. Neutral</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-sm" style="float:left; width: 300px;height:50px; caption-side:top;">
+  <caption class="text-center" style="caption-side:top;">Emotion Corelation - AURIN vs Twitter</caption>
+  <tbody>
+    <tr>
+      <td>
+        <a [routerLink]="['/chart/emotion-corel/vic']">Victoria</a>
+      </td>
+      <td>
+        <a [routerLink]="['/chart/emotion-corel/nsw']">New South Wales</a>
+      </td>
+  </tbody>
+</table>

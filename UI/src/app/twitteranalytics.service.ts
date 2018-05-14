@@ -23,46 +23,39 @@ export class TwitteranalyticsService {
 
   constructor(private http: HttpClient) {}
 
-  getStateInfo(name: string): Observable<StateInfo> {
-    return this.http.get<StateInfo>(API_URL+'/api/states/' + name);
-  }
-
-  getAllSuburbsFeature(): Observable<SuburbFeature> {
-    return this.http.get<SuburbFeature>(API_URL+'/api/suburbs');
-  }
-
-  getAllSuburbsFeatureByState(stateName: string): Observable<SuburbFeature> {
-    return this.http.get<SuburbFeature>(API_URL+'/api/'+ stateName +'/suburbs');
+  getAllSuburbsFeatureByState(stateName: string): Observable<any> {
+    return this.http.get<any>(API_URL+'/api/'+ stateName +'/suburbs');
   }
 
   getSuburbFeature(name: string): Observable<SuburbFeature> {
     return this.http.get<SuburbFeature>(API_URL+'/api/suburb/' + name);
   }
 
-  tweetsPerPostcode() {
-    let tweets = [];
-    let tweetInfo = {}
+  getSuburbDetails(state: string, suburb: string): Observable<SuburbFeature> {
+    return this.http.get<SuburbFeature>(API_URL+'/api/suburb/' + state+'/'+suburb);
+  }
 
-    tweetInfo = {};
-    tweetInfo['postcode'] = 'a';
-    tweetInfo['tweetsCount'] = 1;
-    tweets.push(tweetInfo);
+  getTopSalarySuburbsByState(stateName: string): Observable<any> {
+    return this.http.get<any>(API_URL+'/api/'+stateName+'/salary/top');
+  }
 
-    tweetInfo = {};
-    tweetInfo['postcode'] = 'b';
-    tweetInfo['tweetsCount'] = 2;
-    tweets.push(tweetInfo);
+  getTopIlliterateSuburbsByState(stateName: string): Observable<any> {
+    return this.http.get<any>(API_URL+'/api/'+stateName+'/illiterate/top');
+  }
 
-    tweetInfo = {};
-    tweetInfo['postcode'] = 'c';
-    tweetInfo['tweetsCount'] = 3;
-    tweets.push(tweetInfo);
+  getTopUniStudentsSuburbsByState(stateName: string): Observable<any> {
+    return this.http.get<any>(API_URL+'/api/'+stateName+'/unistudents/top');
+  }
 
-    tweetInfo = {};
-    tweetInfo['postcode'] = 'd';
-    tweetInfo['tweetsCount'] = 4;
-    tweets.push(tweetInfo);
+  getTopemployedSuburbsByState(stateName: string): Observable<any> {
+    return this.http.get<any>(API_URL+'/api/'+stateName+'/employment/top');
+  }
 
-    return tweets;
+  getTopEmotionsSuburbsByState(stateName: string, emotion: string): Observable<any> {
+    return this.http.get<any>(API_URL+'/api/'+stateName+'/emotions/'+emotion+'/top');
+  }
+
+  getSuburbEmotionsByName(stateName: string, suburbName: string): Observable<any> {
+    return this.http.get<any>(API_URL+'/api/emotion/'+stateName+'/'+suburbName);
   }
 }

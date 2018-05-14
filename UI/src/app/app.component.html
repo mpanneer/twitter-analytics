@@ -1,20 +1,29 @@
 <style>
-  li{
-    display:inline;
-    padding-right: 20px;  
+  li {
+    display: inline;
+    padding-right: 20px;
   }
 </style>
 <div style="text-align:center">
   <h1>
     {{title}}
   </h1>
-    <nav>
-      <ul>
-      <li><a [routerLink]="['maps', 'Victoria']">Victoria</a></li>
-      <li><a [routerLink]="['maps', 'New South Wales']">New South Wales</a></li>
-      <li><a routerLink="/charts" routerLinkActive="active">Charts</a></li>
-      </ul>
-    </nav>
-    <router-outlet></router-outlet>
-</div>
+  <ngb-tabset>
+    <ngb-tab title="Maps">
+      <ng-template ngbTabContent>
+        <a [routerLink]="['maps', 'vic']">Victoria</a>
+        <br/>
+        <a [routerLink]="['maps', 'nsw']">New South Wales</a>
+        <router-outlet></router-outlet>
+      </ng-template>
+    </ngb-tab>
 
+
+    <ngb-tab title="Charts" [routerLink]="['charts']">
+      <ng-template ngbTabContent style="padding:5px">
+        <router-outlet></router-outlet>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+</div>

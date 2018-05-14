@@ -5,18 +5,18 @@ import { HttpModule } from '@angular/http';
 import {HttpClientModule} from '@angular/common/http'
 import { AppComponent } from './app.component';
 import { MapsComponent } from './maps/maps.component';
-import { ChartsComponent } from './charts/charts.component';
 import { MapsModule } from './maps/maps.module';
+import { ChartsModule } from './charts/charts.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
-  { path: 'charts',      component: ChartsComponent },
+  
 ];
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ChartsComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +27,9 @@ const appRoutes: Routes = [
       { enableTracing: false }
     ),
     MapsModule,
-    RouterModule
+    ChartsModule,
+    RouterModule,
+    NgbModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

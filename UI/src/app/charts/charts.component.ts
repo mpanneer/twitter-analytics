@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TwitteranalyticsService } from '../twitteranalytics.service';
 import { Chart } from 'chart.js';
 import { ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-charts',
@@ -11,37 +12,11 @@ import { ViewChild } from '@angular/core';
 export class ChartsComponent implements OnInit {
 
   chart = [];
-  tweets = [];
-  constructor(private _twitterAnalytics: TwitteranalyticsService) {}
+  state: string;
+
+  constructor(private route: ActivatedRoute, private _twitterAnalytics: TwitteranalyticsService) {}
 
   ngOnInit() {
-
-    this.tweets = this._twitterAnalytics.tweetsPerPostcode();
-
-    let postCodes = this.tweets.map(tweets => tweets.postcode);
-    let noOfTweets = this.tweets.map(tweets => tweets.tweetsCount);
     
-    this.chart = new Chart('canvas', {
-      type: 'bar',
-      data: {
-        labels: postCodes,
-        datasets: [
-          { 
-            label: 'No. of Tweets',
-            data: noOfTweets,
-            borderColor: "#3cba9f"
-          }
-        ]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero:true
-            }
-          }]
-        }
-      }
-    });
   }
-}
+} 

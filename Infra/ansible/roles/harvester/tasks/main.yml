@@ -7,3 +7,17 @@
    name: openjdk-8-jre-headless
    state: present
 
+- name: Clone the Git repo
+  git: repo=https://github.com/{{githubAccount}}/{{repoName}}.git dest={{homeDir}}/{{appDir}} update=yes force=yes accept_hostkey=yes
+  register: git_finished
+
+- name: Create a properties file
+  template: 
+    src: templates/configTweetSearchFileMel1.properties
+    dest: /home/ubuntu/twitter_analytics/harvester/config/configTweetSearchFileMel1.properties
+
+- name: Start the harvester
+  shell: startup.sh
+  args:  
+    chdir: "{{homeDir}}/{{appDir}}/harvester"
+    when: git_finished.changed

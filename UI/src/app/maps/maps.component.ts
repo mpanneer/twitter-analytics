@@ -4,7 +4,7 @@ import { ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TwitteranalyticsService, StateInfo, SuburbFeature } from '../twitteranalytics.service';
 import { Observable, of } from 'rxjs';
-import {ChangeDetectorRef} from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class MapsComponent implements OnInit {
   @ViewChild('gmap') gmapElement: any;
 
   constructor(private route: ActivatedRoute, private _twitterAnalytics: TwitteranalyticsService) {
-    
+
   }
 
   ngOnInit() {
@@ -30,13 +30,10 @@ export class MapsComponent implements OnInit {
   }
 
   showMap() {
-    this._twitterAnalytics.getStateInfo(this.state).subscribe((data: StateInfo) => {
-      let response = data['data'];
-      let stateInfo = response['rows'];
-      let stateLat = stateInfo[0].value.position.lat;
-      let stateLong = stateInfo[0].value.position.long;
 
-      let latLng = new google.maps.LatLng(stateLat, stateLong);
+    this._twitterAnalytics.getTopEmotionsSuburbsByState(this.state, 'happy').subscribe((data) => {
+      let topsuburbs = data['data'].rows;
+      let latLng = new google.maps.LatLng(-37, 143);
       var mapProp = {
         center: latLng,
         zoom: 10,
@@ -45,30 +42,46 @@ export class MapsComponent implements OnInit {
         mapTypeControl: false,
         panControl: false
       };
-      
       var infoWindow = new google.maps.InfoWindow();
       this.gmap = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
-      this.gmap.panTo(latLng);
       
-      this._twitterAnalytics.getAllSuburbsFeatureByState(this.state).subscribe((data : SuburbFeature) => {
-        let suburb = data['data'];
-        let suburbs = suburb['rows'];
-        suburbs.forEach(element => {
-          let suburbFeature = element.value
-          this.gmap.data.addGeoJson(suburbFeature);
+
+      topsuburbs.forEach(element => {
+        
+        let suburbName = element.key[1];
+        let emotionPercent = element.value['happyPercent'];
+        console.log(suburbName,emotionPercent);
+        this._twitterAnalytics.getSuburbDetails(this.state, suburbName).subscribe((data) => {
+          let rowData = data['data'].rows[0];
+          if (rowData) {
+          let mapFeature = {};
+          mapFeature['type'] = 'Feature';
+          mapFeature['geometry'] = rowData.doc.geometry;
+          mapFeature['Suburb_Name'] = suburbName;
+          mapFeature['opacity'] = emotionPercent/100;
+          this.gmap.data.addGeoJson(mapFeature);
+          this.gmap.data.setStyle(function(mapFeature) {
+            var value = mapFeature.getProperty('opacity');
+            var opacity = value;
+            return {
+              fillOpacity: opacity,
+              fillColor: "red",
+              strokeWeight: 1,
+            };
+          });
+        } 
         });
-      });
-
-      this.gmap.data.setStyle({ fillOpacity: 0.0, strokeWeight: 1.0 });
-
+    
       this.gmap.data.addListener('click', function (event) {
         let data = event;
-        let suburb = data.feature.f.Suburb_Name;
+        console.log(data);
+        let suburb = data.feature.Suburb_Name;
         infoWindow.setContent(suburb + "<br/>This is a test");
         infoWindow.setPosition(event.latLng);
         infoWindow.open(this.map);
       });
     });
+  });
   }
 
   addMarker(map, location) {

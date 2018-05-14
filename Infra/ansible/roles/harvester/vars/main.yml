@@ -1,2 +1,5 @@
 ---
 # vars file for harvester
+
+search_mel_key:
+  this is a test
