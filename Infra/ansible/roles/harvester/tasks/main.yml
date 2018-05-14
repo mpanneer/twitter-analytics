@@ -14,10 +14,22 @@
 - name: Create a properties file
   template: 
     src: templates/configTweetSearchFileMel1.properties
-    dest: /home/ubuntu/twitter_analytics/harvester/config/configTweetSearchFileMel1.properties
+    dest: "{{homeDir}}/{{appDir}}/harvester/config/configTweetSearchFileMel1.properties"
+
+- name: Creates logs directory
+  file: path="{{homeDir}}/{{appDir}}/harvester/logs" state=directory
+
+- name: Creates working directory
+  file: path="{{homeDir}}/{{appDir}}/harvester/working" state=directory
+
+- name: Creates output directory
+  file: path="{{homeDir}}/{{appDir}}/analyser/input" state=directory
+
+- file:
+    path: "{{homeDir}}/{{appDir}}/harvester/startup.sh"
+    state: touch
+    mode: "u+x"
 
 - name: Start the harvester
-  shell: startup.sh
-  args:  
-    chdir: "{{homeDir}}/{{appDir}}/harvester"
-    when: git_finished.changed
+  command: sh "{{homeDir}}/{{appDir}}/harvester/startup.sh"
+ 
