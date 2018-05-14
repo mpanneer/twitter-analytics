@@ -35,28 +35,28 @@
     register: git_finished
 
   - name: Running NPM install on the API app
-    npm: path={{homeDir}}/{{appDir}}/api
+    npm: path={{homeDir}}/{{appDir}}/webapi
     register: api_npm_finished
     when: git_finished.changed
 
   - name: Running NPM install on the UI app
-    npm: path={{homeDir}}/{{appDir}}/ui
+    npm: path={{homeDir}}/{{appDir}}/webui
     register: ui_npm_finished
     when: git_finished.changed
 
   - name: Running NPM build on the UI app
     shell: npm run build
     args:
-      chdir: "{{homeDir}}/{{appDir}}/ui"
+      chdir: "{{homeDir}}/{{appDir}}/webui"
     register: ui_npm_finished
     when: git_finished.changed  
 
   - name: Start API
-    command: pm2 start server.js -- {{COUCHDB_HOST}} {{API_PORT}} --name api chdir={{homeDir}}/{{appDir}}/api
+    command: pm2 start server.js -- {{COUCHDB_HOST}} {{API_PORT}} --name api chdir={{homeDir}}/{{appDir}}/webapi
     ignore_errors: yes
     when: api_npm_finished.changed
 
   - name: Start UI
-    command: pm2 start http-server --name ui -- {{homeDir}}/{{appDir}}/ui/dist/twitteranalytics -p 80
+    command: pm2 start http-server --name ui -- {{homeDir}}/{{appDir}}/webui/dist/twitteranalytics -p 80
     ignore_errors: yes
     when: ui_npm_finished.changed  
