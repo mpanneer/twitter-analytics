@@ -57,6 +57,8 @@
     when: api_npm_finished.changed
 
   - name: Start UI
-    command: pm2 start http-server --name ui -- {{homeDir}}/{{appDir}}/webui/dist/twitteranalytics -p 80
+    shell: npm run start
+    args:
+      chdir: "{{homeDir}}/{{appDir}}/webui"
     ignore_errors: yes
-    when: ui_npm_finished.changed  
+    #when: ui_npm_finished.changed  
