@@ -268,10 +268,20 @@ public class TweetReaderTwitter implements TweetReader {
                     // during the initial scan
                     if (referenceIdBeforeSearch.equals(referenceTweetId)
                             && result != null) {
+                        query = new Query(searchQuery);
                         this.referenceTweetId = originalReferenceTweetId;
                         query.setResultType(ResultType.recent);
                         query.setCount(MAX_TWEETS_PER_SESSION);
                         setQueryReferenceId(query);
+                        // force harvestor to pick a new account and put current
+                        // account back in the queue
+                        twitterAccount = null;
+                        Date nextRetryTime = new Date(
+                                System.currentTimeMillis() + (15 * 60 * 1000));
+                        accountPool[currentTwitterAccountIndex]
+                                .setNextRetryTime(nextRetryTime);
+                        accountPool[currentTwitterAccountIndex]
+                                .setRemainingSearchCalls(0);
                         LOGGER.log(Level.INFO,
                                 "the Search Reached the 7 day limit it will now restart from inital reference point");
                         continue;
@@ -281,6 +291,8 @@ public class TweetReaderTwitter implements TweetReader {
                     TweetProcessor.handleTweets(tweetJsons, searchQueryState);
                 }
 
+                // Use the status API to update account status - calls left in
+                // this session and next retry time
                 if (result != null) {
                     query = result.nextQuery();
                     RateLimitStatus status = result.getRateLimitStatus();
