@@ -57,8 +57,8 @@
     when: api_npm_finished.changed
 
   - name: Start UI
-    shell: npm run start
-    args:
-      chdir: "{{homeDir}}/{{appDir}}/webui"
+    shell: "(cd {{homeDir}}/{{appDir}}/webui; ng serve --host 0.0.0.0 --port 4200 >/dev/null 2>&1 &)"
+    async: 10
+    poll: 0
     ignore_errors: yes
     #when: ui_npm_finished.changed  

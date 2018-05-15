@@ -1,9 +1,7 @@
-    <style>
-      div {
-        width: 700px;
-        height: 600px;
-      }
-    </style>
-    <div id="chart">
-      <canvas id="canvas">{{ chart }}</canvas>
-    </div>
+<div align="center" style="padding:20px">
+  <span align="center">{{chartName}}</span>
+  <div id="chart" style="width:1000px;height:500px">
+    <canvas id="canvas">{{ chart }}</canvas>
+  </div>
+  <a [routerLink]="['/charts']">Go Back</a>
+</div>

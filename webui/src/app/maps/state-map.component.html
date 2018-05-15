@@ -1,0 +1,33 @@
+<div style="padding: 15px;width:100%">
+    <span style="padding-right: 60px">
+        <a href="/maps/vic">Victoria</a>
+    </span>
+    <span style="padding-right: 10px">
+        <a href="/maps/nsw">New South Wales</a>
+    </span>
+</div>
+<div align="center">
+    <div style="padding-left: 80px;padding-bottom: 15px;float: left;">
+        <span style="padding-right: 10px">
+            <b>Select Emotion:</b>
+        </span>
+        <select (change)="emotionSelect($event.target.value)">
+            <option *ngFor="let emotion of emotions" value={{emotion}}>
+                {{emotion}}
+            </option>
+        </select>
+    </div>
+    <div style="padding-left: 90px;padding-bottom: 15px;float: left;">
+        <span style="padding-right: 10px">
+            <b>Select Attribute:</b>
+        </span>
+        <select (change)="attributeSelect($event.target.value)">
+            <option *ngFor="let attribute of attributes" value={{attribute}}>
+                {{attribute}}
+            </option>
+        </select>
+    </div>
+    <div align="center" style="padding: 10px">
+        <div #gmap style="width:90%;height:500px;"></div>
+    </div>
+</div>

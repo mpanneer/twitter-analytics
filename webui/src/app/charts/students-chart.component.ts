@@ -23,6 +23,7 @@ export class UniStudentsChartComponent extends ChartComponent implements OnInit 
     this.route.params.subscribe(params => {
       this.state = params['state'];
       this.drawTopStudentSuburbs(this.state);
+      this.chartName = 'Top 10 '+ this.state.toUpperCase()+' Suburbs : Uni Students %'
     });
   }
 

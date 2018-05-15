@@ -8,18 +8,15 @@
   <h1>
     {{title}}
   </h1>
-  <ngb-tabset>
-    <ngb-tab title="Maps">
+  <ngb-tabset (tabChange)="onTabChange($event)">
+    <ngb-tab id="maps" title="Maps">
       <ng-template ngbTabContent>
-        <a [routerLink]="['maps', 'vic']">Victoria</a>
-        <br/>
-        <a [routerLink]="['maps', 'nsw']">New South Wales</a>
         <router-outlet></router-outlet>
       </ng-template>
     </ngb-tab>
 
 
-    <ngb-tab title="Charts" [routerLink]="['charts']">
+    <ngb-tab id="charts" title="Charts" [routerLink]="['charts']">
       <ng-template ngbTabContent style="padding:5px">
         <router-outlet></router-outlet>
       </ng-template>

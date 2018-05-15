@@ -15,6 +15,7 @@ export class LiteracyChartComponent extends ChartComponent implements OnInit {
   chart = [];
   state: string;
 
+
   constructor(private route: ActivatedRoute, private _twitterAnalytics: TwitteranalyticsService) {
     super();
   }
@@ -23,6 +24,7 @@ export class LiteracyChartComponent extends ChartComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.state = params['state'];
       this.drawTopIlliterateSuburbs(this.state);
+      this.chartName = 'Top 10 '+ this.state.toUpperCase()+' Suburbs : Literacy %'
     });
   }
 

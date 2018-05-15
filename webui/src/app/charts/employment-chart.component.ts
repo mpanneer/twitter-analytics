@@ -23,6 +23,7 @@ export class EmploymentChartComponent extends ChartComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.state = params['state'];
       this.drawTopEmployedSuburbs(this.state);
+      this.chartName = 'Top 10 '+ this.state.toUpperCase()+' Suburbs : Employment %'
     });
   }
 

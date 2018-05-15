@@ -23,6 +23,7 @@ export class EmotionChartComponent extends ChartComponent implements OnInit {
       let state = params['state'];
       let emotion = params['emotion'];
       this.drawTopEmotionSuburbs(state, emotion);
+      this.chartName = 'Top 10 '+ state.toUpperCase()+' Suburbs : '+ emotion;
     });
   }
 

@@ -2,10 +2,11 @@ import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MapsComponent } from './maps.component';
+import { StateMapComponent } from './state-map.component';
 
 const mapRoutes: Routes = [
-  { path: 'maps/:state', redirectTo: '/state-maps/:state' },
-  { path: 'state-maps/:state', component: MapsComponent }
+  { path: 'maps', component: MapsComponent },
+  { path: 'maps/:state', component: StateMapComponent },
 ];
 
 @NgModule({

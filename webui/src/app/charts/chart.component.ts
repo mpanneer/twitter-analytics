@@ -12,6 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ChartComponent {
 
   chart = [];
+  chartName: string;
 
   drawBarChart(label,labels,values) {
     this.chart = new Chart('canvas', {
