@@ -87,13 +87,15 @@ public class TweetReaderFile extends Thread implements TweetReader {
      * @param startPosition
      * @param finishPosition
      */
-    public TweetReaderFile(int slaveId, int startPosition, int finishPosition) {
+    public TweetReaderFile(int slaveId, int startPosition, int finishPosition,
+            String fileTweetState) {
         super();
         this.setName("Slave " + (slaveId));
         this.slaveId = slaveId;
         this.startPosition = startPosition;
         this.finishPosition = finishPosition;
         this.tweetsBatch = new ArrayList<String>();
+        this.fileTweetState = fileTweetState;
     }
 
     /**
@@ -184,7 +186,7 @@ public class TweetReaderFile extends Thread implements TweetReader {
             int startPosition = i * workerBatchSize + 1;// Start position
             int finishPosition = (i + 1) * workerBatchSize;// Finish Position
             slaves[i] = new TweetReaderFile((i + 1), startPosition,
-                    finishPosition);
+                    finishPosition, this.fileTweetState);
             slaves[i].start();
         }
     }
