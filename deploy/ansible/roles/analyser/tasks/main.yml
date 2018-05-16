@@ -58,6 +58,6 @@
 
 
 - name: Start the analyser!
-  command: python3 sentimentanalysis.py input/ output/  >sentiment.log 2>sentiment.err &
+  command: python sentimentanalysis.py input/ output/  >sentiment.log 2>sentiment.err &
   args:
     chdir: "{{homeDir}}/{{appDir}}/sentimentanalysis"
