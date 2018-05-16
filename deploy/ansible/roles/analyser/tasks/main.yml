@@ -4,5 +4,54 @@
 - name: Install Pip
   become: yes
   apt:
+   name: python3
+   state: present
+
+- name: Install Pip
+  become: yes
+  apt:
    name: python-pip
    state: present
+
+- name: Install NLTK
+  become: yes
+  apt:
+   name: python-nltk
+   state: present
+
+- name: Install Numpy
+  become: yes
+  apt:
+   name: python-numpy
+   state: present
+
+- name: Install NLTK
+  become: yes
+  pip:
+   name: nltk
+
+- name: Install sklearn
+  become: yes
+  pip:
+   name: sklearn
+
+- name: Install scipy
+  become: yes
+  pip:
+   name: scipy
+
+- name: Install pandas
+  become: yes
+  pip:
+   name: pandas
+
+- name: Initialise!
+  command: python3 init.py
+  args:
+    chdir: "{{homeDir}}/{{appDir}}/sentimentanalysis"
+
+
+- name: Start the analyser!
+  command: python3 sentimentanalysis.py input/ output/  >sentiment.log 2>sentiment.err &
+  args:
+    chdir: "{{homeDir}}/{{appDir}}/sentimentanalysis"

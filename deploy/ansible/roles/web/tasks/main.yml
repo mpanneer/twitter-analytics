@@ -27,6 +27,9 @@
   - name: Install "http-server" node.js package.
     npm: name=http-server global=yes
 
+  - name: Install "forever" node.js package.
+    npm: name=forever global=yes
+
   - name: Create a directory for the App
     file: path={{homeDir}}/{{appDir}} state=directory
 
@@ -54,11 +57,11 @@
   - name: Start API
     command: pm2 start server.js -- {{COUCHDB_HOST}} {{API_PORT}} --name api chdir={{homeDir}}/{{appDir}}/webapi
     ignore_errors: yes
-    when: api_npm_finished.changed
+    #when: api_npm_finished.changed
 
   - name: Start UI
-    shell: "(cd {{homeDir}}/{{appDir}}/webui; ng serve --host 0.0.0.0 --port 4200 >/dev/null 2>&1 &)"
-    async: 10
-    poll: 0
+    shell: forever start node_modules/@angular/cli/bin/ng serve
+    args:
+      chdir: "{{homeDir}}/{{appDir}}/webui"
     ignore_errors: yes
     #when: ui_npm_finished.changed  

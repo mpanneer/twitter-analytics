@@ -22,8 +22,11 @@
 - name: Creates working directory
   file: path="{{homeDir}}/{{appDir}}/harvester/working" state=directory
 
-- name: Creates output directory
+- name: Creates input directory
   file: path="{{homeDir}}/{{appDir}}/analyser/input" state=directory
+
+ name: Creates output directory
+  file: path="{{homeDir}}/{{appDir}}/analyser/output" state=directory
 
 - file:
     path: "{{homeDir}}/{{appDir}}/harvester/startup.sh"

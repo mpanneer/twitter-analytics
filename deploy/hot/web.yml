@@ -1,5 +1,7 @@
 parameters:
-  ImageId: f82012f7-5042-48aa-81c2-a59684840c23
+  InstanceName: TwitterAnalyser
+  ImageId: d6929048-3a81-4bf7-b5ef-d69bd67219ba
   KeyName: endurance
-  InstanceType: m1.small
+  InstanceType: m1.medium
   AvailabilityZone: melbourne-qh2
+  VolumeSize: 20

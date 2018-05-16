@@ -1,8 +1,10 @@
 HeatTemplateFormatVersion: '2012-12-12'
 
 Description: >
-  Template to creat the Web instance.
+  Template to create the instance.
 Parameters:
+  InstanceName:
+    Type: String
   ImageId:
     Type: String
     Description:
@@ -15,15 +17,20 @@ Parameters:
     Type: String
     Description: Type of the instance to be created.
     Default: m1.small
-    AllowedValues: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
+    AllowedValues: [m1.small, m1.medium, m1.large, m1.xlarge]
+  VolumeSize:
+    Type: Number
+    Description: Size of the block storage volume.
+    Default: 10
   AvailabilityZone:
     Type: String
     Description: The NeCTAR zone in which the VM is to run (must have block storage)
-    Default: melbourne-np
-    AllowedValues: [melbourne-qh2, melbourne-np, monash, qld]
+    Default: melbourne-qh2
+    AllowedValues: [melbourne-qh2, melbourne-np]
+  
 
 Resources:
-  SecurityGroup:
+  DefaultSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
       GroupDescription: "Enable ssh access and icmp"
@@ -43,36 +50,91 @@ Resources:
           FromPort: "22"
           ToPort: "22"
           CidrIp: "0.0.0.0/0"
-        -
-          IpProtocol: "tcp"
-          FromPort: "80"
-          ToPort: "80"
-          CidrIp: "0.0.0.0/0" 
-        -
-          IpProtocol: "tcp"
-          FromPort: "443"
-          ToPort: "443"
-          CidrIp: "0.0.0.0/0" 
-        -
-          IpProtocol: "tcp"
-          FromPort: "8000"
-          ToPort: "8000"
-          CidrIp: "0.0.0.0/0" 
+
+  CouchDBSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Enable CouchDB port"
+      SecurityGroupIngress:
         -
           IpProtocol: "tcp"
           FromPort: "5984"
           ToPort: "5984"
           CidrIp: "0.0.0.0/0" 
+
+  WebSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Enable Web UI and API port"
+      SecurityGroupIngress:
+        -
+          IpProtocol: "tcp"
+          FromPort: "4200"
+          ToPort: "4200"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "9000"
+          ToPort: "9000"
+          CidrIp: "0.0.0.0/0"
+
+  VolumeMountConfig:
+    Type: OS::Heat::CloudConfig
+    Properties:
+      cloud_config:
+        write_files:
+        - path: /tmp/mount-volume
+          content: |
+            #!/bin/bash
+            volume_id="%volume_id%"
+            volume_dev="/dev/disk/by-id/virtio-$(echo ${volume_id} | cut -c -20)"
+            mkfs.ext4 ${volume_dev}
+            mkdir -pv /data/twitter_analytics
+            echo "${volume_dev} /data/twitter_analytics ext4 defaults 1 2" >> /etc/fstab
+            mount /data/twitter_analytics
+          permissions: '0700'
+
+  VolumeMountScript:
+    Type: OS::Heat::SoftwareConfig
+    Properties:
+      group: ungrouped
+      config: |
+        #!/bin/bash
+        echo "Running volume mount boot script"
+        /tmp/mount-volume
+
+  ServerInit:
+    Type: OS::Heat::MultipartMime
+    Properties:
+      parts:
+      - config: { Ref: VolumeMountConfig }
+      - config: { Ref: VolumeMountScript }
+
   NovaInstance:
     Type: OS::Nova::Server
     Properties:
+      name: { Ref: InstanceName }
       availability_zone: { Ref: AvailabilityZone }
       image: { Ref: ImageId }
       flavor: { Ref: InstanceType }
       key_name: { Ref: KeyName }
       security_groups:
-        - { Ref: SecurityGroup }
-      user_data:
+        - { Ref: DefaultSecurityGroup }
+        - { Ref: CouchDBSecurityGroup }
+        - { Ref: WebSecurityGroup }
+            
+  CinderVolume:
+    Type: OS::Cinder::Volume
+    Properties:
+      size: { Ref: VolumeSize }
+      availability_zone: { Ref: AvailabilityZone }
+      
+  VolumeAttachment:
+    Type: OS::Cinder::VolumeAttachment
+    Properties:
+      volume_id: { Ref: CinderVolume }
+      instance_uuid: { Ref: NovaInstance }
+      mountpoint: /dev/vdc
 
 Outputs:
   InstanceIP:
