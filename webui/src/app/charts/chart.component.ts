@@ -66,7 +66,13 @@ export class ChartComponent {
               beginAtZero:true,
               min: 0,
               max: 100,
-              stepSize: 20
+              stepSize: 20,
+              autoSkip: false
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              autoSkip: false
             }
           }]
         }
