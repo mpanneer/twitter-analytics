@@ -38,17 +38,17 @@
 
 - name: Install sklearn
   become: yes
-  pip: executable=pip3
+  pip: 
    name: sklearn
 
 - name: Install scipy
   become: yes
-  pip: executable=pip3
+  pip: 
    name: scipy
 
 - name: Install pandas
   become: yes
-  pip: executable=pip3
+  pip: 
    name: pandas
 
 - name: Initialise!
@@ -58,6 +58,8 @@
 
 
 - name: Start the analyser!
-  command: python sentimentanalysis.py input/ output/  >sentiment.log 2>sentiment.err &
+  shell: python sentimentanalysis.py input/ output/  >sentiment.log 2>sentiment.err &
+  async: 10
+  poll: 0
   args:
     chdir: "{{homeDir}}/{{appDir}}/sentimentanalysis"
