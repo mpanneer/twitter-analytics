@@ -7,6 +7,12 @@
    name: python3
    state: present
 
+- name: Install Python3 Pip
+  become: yes
+  apt:
+   name: python3-pip
+   state: present
+
 - name: Install Pip
   become: yes
   apt:
@@ -16,7 +22,7 @@
 - name: Install NLTK
   become: yes
   apt:
-   name: python-nltk
+   name: python3-nltk
    state: present
 
 - name: Install Numpy

@@ -25,7 +25,7 @@
 - name: Creates input directory
   file: path="{{homeDir}}/{{appDir}}/analyser/input" state=directory
 
- name: Creates output directory
+- name: Creates output directory
   file: path="{{homeDir}}/{{appDir}}/analyser/output" state=directory
 
 - file:

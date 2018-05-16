@@ -1,2 +1,6 @@
 ---
-# defaults file for analyser
+homeDir: /home/ubuntu
+appDir : twitter_analytics
+repoName : twitter-analytics
+githubAccount: mpanneer
+COUCHDB_HOST: 43.240.98.139
