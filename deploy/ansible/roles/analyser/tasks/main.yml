@@ -1,7 +1,7 @@
 ---
 # tasks file for analyser
 
-- name: Install Pip
+- name: Install Python3
   become: yes
   apt:
    name: python3
@@ -19,7 +19,7 @@
    name: python-pip
    state: present
 
-- name: Install NLTK
+- name: Install Python3 NLTK
   become: yes
   apt:
    name: python3-nltk
@@ -38,17 +38,17 @@
 
 - name: Install sklearn
   become: yes
-  pip:
+  pip: executable=pip3
    name: sklearn
 
 - name: Install scipy
   become: yes
-  pip:
+  pip: executable=pip3
    name: scipy
 
 - name: Install pandas
   become: yes
-  pip:
+  pip: executable=pip3
    name: pandas
 
 - name: Initialise!
